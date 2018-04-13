@@ -1,0 +1,55 @@
+package com.sso.serviceImpl;
+
+import java.util.Date;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.sso.dao.LoginDao;
+import com.sso.dao.UserDao;
+import com.sso.domain.User;
+import com.sso.service.LoginService;
+import com.sso.util.MD5Tools;
+
+@Service("LoginService")
+public class LoginServiceImpl implements LoginService {
+	@Resource
+	private LoginDao loginDao;
+	@Resource
+	private UserDao userDao;
+
+	@Override
+	public User checkIn(String username, String password) {
+		String md5Password = MD5Tools.encode(password);
+		User tempUser = userDao.findByUsername(username, md5Password);
+		return tempUser;
+	}
+
+	@Override
+	public void Register(User user) {
+		if(!checkRegister(user.geteMail()))
+			user.setTextVail("用户已经注册！");
+		String md5Password = MD5Tools.encode(user.getPassWord());
+		user.setPassWord(md5Password);
+
+		Date now = new Date();
+		user.setRegisterTime(now);
+		user.setInsertTime(now);
+		user.setUpdateTime(now);
+
+		userDao.registerUser(user);
+
+	}
+
+	@Override
+	public boolean checkRegister(String email) {
+		User user = userDao.checkRegister(email);
+		if (user != null)
+			return false;
+		else
+			return true;
+
+	}
+
+}

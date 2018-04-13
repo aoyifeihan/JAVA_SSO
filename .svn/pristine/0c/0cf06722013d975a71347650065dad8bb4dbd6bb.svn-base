@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sso.dao.UserDao">
+	<resultMap id="userMap" type="com.sso.domain.User">
+		<!-- <id property="id" column="id" jdbcType="BIGINT" /> -->
+		<result property="eMail" column="eMail" jdbcType="VARCHAR" />
+		<result property="passWord" column="password" jdbcType="VARCHAR" />
+		<result property="nickName" column="nickname" jdbcType="VARCHAR" />
+		<result property="telPhone" column="telphone" jdbcType="VARCHAR" />
+		<result property="insertTime" column="inserttime" jdbcType="DATE" />
+		<result property="updateTime" column="updatetime" jdbcType="DATE" />
+	</resultMap>
+
+	<select id="findByUsername" resultMap="userMap">
+		SELECT * FROM authuser
+		WHERE email=#{0} and password=#{1}
+	</select>
+	<select id="registerUser" parameterType="User">
+		INSERT into authuser
+		(eMail,nickName,PASSWORD,inserttime,updatetime,registerTime)
+		values
+		(#{eMail},#{nickName},#{passWord},#{insertTime},#{updateTime},#{registerTime})
+	</select>
+	<select id="checkRegister" resultMap="userMap">
+		SELECT * FROM authuser
+		WHERE email=#{0}
+	</select>
+</mapper>

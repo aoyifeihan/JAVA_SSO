@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sso.dao.AuthLoginDao">
+
+	<select id="insertAuthLogin" parameterType="com.sso.dao.AuthLoginDao">
+		insert into authlogin
+		(Token,email,BeginDate,EndDate,IsExpire)
+		values(#{token},#{eMail},#{beginDate},#{endDate},#{isExpire})
+	</select>
+		<select id="queryAuthLoginByName" resultType="com.sso.domain.AuthLogin">
+		select *from authlogin where email=#{0} and isExpire=1
+	</select>
+</mapper>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!-- 开启AOP注解扫描 -->
+    <aop:aspectj-autoproxy proxy-target-class="true" />
+  
+    <!-- 包扫描 -->
+    <context:component-scan base-package="com.sso.service" />
+    
+   <!-- 配置切面Bean -->
+   <!--  <bean id="SSoLoginService" class="cn.temptation.service.SSoLoginServiceImpl" />-->
+   <!-- 配置切面Bean -->
+   <!-- <bean id="loginService" class="cn.temptation.service.LoginServiceImpl" />-->
+    
+    <bean id="SSoLoginAspectBean" class="com.sso.aop.SSoLoginAspect" />
+      <!-- 配置一个切面 -->
+    <aop:config>
+        <aop:aspect id="SSoLoginAspect" ref="SSoLoginAspectBean">
+            <aop:pointcut id="SSoLoginServicePointcut" expression="execution(* com.sso.aop.*.*(..))" />
+            <!-- 配置前置通知 -->
+            <aop:before pointcut-ref="SSoLoginServicePointcut" method="beforeAdvice" />
+            <!-- 配置前置通知 -->
+            <aop:after pointcut-ref="SSoLoginServicePointcut" method="afterAdvice" />
+            <!-- 配置后置返回通知 -->
+            <aop:after-returning pointcut-ref="SSoLoginServicePointcut" method="afterReturnAdvice" returning="result" />
+            <!-- 配置环绕通知 -->
+            <aop:around pointcut-ref="SSoLoginServicePointcut" method="aroundAdvice" />
+            <!-- 异常通知 -->
+            <aop:after-throwing pointcut-ref="SSoLoginServicePointcut" method="throwingAdvice" throwing="e" />
+        </aop:aspect>
+    </aop:config>
+    
+    
+    <!-- 事务管理器，依赖于数据源 -->
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    
+    <!-- 编写通知：对事务进行增强（通知），需要编写对切入点和具体执行事务细节 -->
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <!--
+                为切入点方法添加事务详情
+                name：方法名，*表示任意方法名称
+                propagation：设置传播行为
+                isolation：设置隔离级别
+                read-only：是否只读
+            -->
+            <tx:method name="add*" propagation="REQUIRED" isolation="DEFAULT" read-only="false" rollback-for="Exception" />
+            <tx:method name="delete*" propagation="REQUIRED" isolation="DEFAULT" read-only="false" rollback-for="Exception" />
+            <tx:method name="update*" propagation="REQUIRED" isolation="DEFAULT" read-only="false" rollback-for="Exception" />
+        </tx:attributes>
+    </tx:advice>
+    
+
+
+    
+</beans>

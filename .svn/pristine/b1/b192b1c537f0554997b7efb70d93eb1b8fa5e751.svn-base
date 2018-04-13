@@ -1,0 +1,7 @@
+package com.sso.dao;
+
+import com.sso.domain.*;
+
+public interface LoginDao {
+    public abstract int checkLogin(AuthLogin username);
+}

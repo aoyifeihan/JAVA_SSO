@@ -1,0 +1,17 @@
+package com.sso.domain;
+
+import java.util.Date;
+
+/**
+ * 用户信息
+ */
+public class AuthLogin {
+    // 成员变量
+  
+    private String ip;
+    private String token;
+    private String useId;
+    private Date beginDate;
+    private Date endDate;
+    private int isExpire;
+}
