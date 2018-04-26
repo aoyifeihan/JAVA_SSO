@@ -24,4 +24,9 @@
 		<property name="prefix" value="/View" />
 		<property name="suffix" value=".jsp" />
 	</bean>
+	<!--公共配置 -->
+	<bean id="ConfigUtil" class="com.sso.util.ConfigUtil">
+		<property name="configFile" value="/properties/public.properties" />
+
+	</bean>
 </beans>

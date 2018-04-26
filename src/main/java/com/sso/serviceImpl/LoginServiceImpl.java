@@ -36,9 +36,7 @@ public class LoginServiceImpl implements LoginService {
 				InsertLoginAndJWT(tempUser);
 			}
 
-		} 
-		else 
-		{
+		} else {
 			tempUser = new User();
 			tempUser.seteMail(authLogin.geteMail());
 			tempUser.setToken(authLogin.getToken());
@@ -55,7 +53,7 @@ public class LoginServiceImpl implements LoginService {
 		authLogin.setEndDate(DateUtils.addDays(now, day));
 		authLogin.setIsExpire(1);
 		authLogin.seteMail(tempUser.geteMail());
-		String jwttoken = JWT.sign(authLogin, 60L * 1000L * 30L);
+		String jwttoken = JWT.sign(authLogin, 60L * 1000L * 60L * 24L * day);
 		authLogin.setToken(jwttoken);
 		tempUser.setToken(jwttoken);
 		authLoginDao.insertAuthLogin(authLogin);

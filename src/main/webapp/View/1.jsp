@@ -4,29 +4,78 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>iview example</title>
-    <link rel="stylesheet" type="text/css" href="http://unpkg.com/iview/dist/styles/iview.css">
-    <script type="text/javascript" src="http://vuejs.org/js/vue.min.js"></script>
-    <script type="text/javascript" src="http://unpkg.com/iview/dist/iview.min.js"></script>
+<meta charset="utf-8">
+<title>iview example</title>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/vue.min.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/axios.min.js"></script>
 </head>
 <body>
-<div id="app">
-    <i-button @click="show">Click me!</i-button>
-    <Modal v-model="visible" title="Welcome">Welcome to iView</Modal>
-</div>
-<script>
-    new Vue({
-        el: '#app',
-        data: {
-            visible: false
-        },
-        methods: {
-            show: function () {
-                this.visible = true;
-            }
-        }
-    })
-  </script>
+	<div id="app">
+		<button @click="checkIn()">Click me!</button>
+
+	</div>
+	<script>
+		new Vue(
+				{
+					el : "#app",
+					data : {},
+
+					methods : {
+						checkIn:function ()
+		 				{
+							var params = new URLSearchParams();
+							params.append('username', '1');
+							params.append('password', '1');
+							var thvue = this;
+							//发起一个user请求，参数为给定的ID
+							axios.get('${pageContext.request.contextPath}/othersys/getToken',params)
+							.then(function(respone){
+								thvue.setCookie("token",respone.data.token)
+								top.location = '${pageContext.request.contextPath}/main/checkpassport';
+							})
+							.catch(function(error){
+							    console.log(error);
+							});
+		 				},
+						//设置cookie
+						setCookie : function(name,value) {
+					
+							
+							var exdays = 30;
+							var d = new Date();
+							d.setTime(d.getTime()
+									+ (exdays * 24 * 60 * 60 * 1000));
+							var expires = "expires=" + d.toUTCString();
+							document.cookie = name+"="+value+"; expires="
+									+ d.toGMTString();
+							var cookiesEnabled = document.cookie
+									.indexOf("token=") != -1;
+							if (!cookiesEnabled) {
+								//没有启用cookie   
+								alert("没有启用cookie ");
+							} else {
+								//已经启用cookie   
+								alert("已经启用cookie ");
+							}
+
+						},
+						//获取cookie
+						getCookie : function(cname) {
+							var name = cname + "=";
+							var ca = document.cookie.split(';');
+							for (var i = 0; i < ca.length; i++) {
+								var c = ca[i];
+								while (c.charAt(0) == ' ')
+									c = c.substring(1);
+								if (c.indexOf(name) != -1)
+									return c.substring(name.length, c.length);
+							}
+							return "";
+						} 
+					}
+				})
+	</script>
 </body>
 </html>

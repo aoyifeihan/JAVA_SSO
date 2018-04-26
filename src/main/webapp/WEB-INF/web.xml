@@ -14,20 +14,35 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
-    <!-- 注册字符集过滤器 -->
-    <filter>
-        <filter-name>characterEncodingFilter</filter-name>
-        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-        <!-- 指定字符集编码 -->
-        <init-param>
-            <param-name>encoding</param-name>
-            <param-value>utf-8</param-value>
-        </init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>characterEncodingFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
+
+	<!-- 功能权限 filter -->
+	<filter>
+		<filter-name>authCodeFilter</filter-name>
+		<filter-class>com.sso.util.AuthCodeFilter</filter-class>
+		<init-param>
+			<!-- 是否启用登录验证 -->
+			<param-name>enable</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<init-param>
+			<!-- 不验证的url(正则表达式) -->
+			<param-name>exclude_url</param-name>
+			<param-value>(/getToken)$|(/login\.jsp22)$|(\.css)$|(\.js)$|(\.jpg)$|(\.png)$|(\.gif)$|(\.pdf)$|(\.eot)$|(\.svg)$|(\.ttf)$|(\.woff)$|(\.woff2)$</param-value>
+		</init-param>
+		<init-param>
+			<!-- 验证的content-type(正则表达式) -->
+			<param-name>content_type</param-name>
+			<param-value>(text/.+)</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>authCodeFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+		<dispatcher>ERROR</dispatcher>
+	</filter-mapping>
 
     <!-- 注册前端控制器 -->
     <servlet>
@@ -37,8 +52,8 @@
             <param-name>contextConfigLocation</param-name>
             <param-value>classpath:spring-mvc.xml</param-value>
         </init-param>
-    </servlet> -->
-    <servlet-mapping>
+    </servlet> 
+     <servlet-mapping>
         <servlet-name>sso</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>

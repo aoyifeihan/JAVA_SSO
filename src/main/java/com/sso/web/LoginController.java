@@ -24,9 +24,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.sso.dao.AuthLoginDao;
 import com.sso.dao.UserDao;
+import com.sso.domain.AuthLogin;
 import com.sso.domain.User;
 import com.sso.service.LoginService;
 import com.sso.util.DateUtils;
+import com.sso.util.JWT;
 import com.sso.util.JsonView;
 import com.sso.util.MD5Tools;
 
@@ -71,7 +73,10 @@ public class LoginController {
 	@ResponseBody
 	public String checkIn(String username, String password) throws Exception {
 
+		if(username==null)
+		  return "error";
 		User tempUser = loginService.checkIn(username, password);
+		AuthLogin entity =JWT.unsign(tempUser.getToken(), AuthLogin.class);
 		String strResult = "";
 		if (tempUser != null) {
 			strResult = SetInfo("ok", tempUser.getToken());
@@ -132,6 +137,21 @@ public class LoginController {
 		jsonMap.put("token", token);
 		return JSONObject.toJSONString(jsonMap);
 
+	}
+	
+	
+	
+	/**
+	 * 检查用户名是否存在
+	 * 
+	 * @param 用户名Email
+	 * @return
+	 */
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	@ResponseBody
+	public String test() {
+		 
+		return "aaaa";
 	}
 
 }
