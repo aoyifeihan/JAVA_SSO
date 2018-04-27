@@ -15,6 +15,7 @@ import com.sso.domain.User;
 import com.sso.service.LoginService;
 import com.sso.util.JWT;
 import com.sso.util.MD5Tools;
+import com.sso.util.StringExtend;
 
 @Service("LoginService")
 public class LoginServiceImpl implements LoginService {
@@ -25,37 +26,57 @@ public class LoginServiceImpl implements LoginService {
 	@Resource
 	private AuthTokenConfigDao authTokenConfigDao;
 
+	/*
+	 * 登录
+	 */
 	@Override
 	public User checkIn(String username, String password) {
-		User tempUser = null;
-		AuthLogin authLogin = authLoginDao.queryAuthLoginByName(username);
-		if (authLogin == null) {
-			String md5Password = MD5Tools.encode(password);
-			tempUser = userDao.findByUsername(username, md5Password);
-			if (tempUser != null) {
-				InsertLoginAndJWT(tempUser);
-			}
-
+		// User tempUser = null;
+		// AuthLogin authLogin = authLoginDao.queryAuthLoginByName(username);
+		// if (authLogin == null) {
+		String md5Password = MD5Tools.encode(password);
+		User tempUser = userDao.findByUsername(username, md5Password);
+		if (tempUser != null) {
+			InsertLoginAndJWT(tempUser);
 		} else {
 			tempUser = new User();
-			tempUser.seteMail(authLogin.geteMail());
-			tempUser.setToken(authLogin.getToken());
+			tempUser.seteMail(username);
+			tempUser.setErrorInfo("登录失败");
+
 		}
+
+		// } else {
+		// tempUser = new User();
+		// tempUser.seteMail(authLogin.geteMail());
+		// tempUser.setToken(authLogin.getToken());
+		// }
 
 		return tempUser;
 	}
 
+	/**
+	 * 插入到登录Login表中
+	 * 
+	 * @param tempUser
+	 */
 	private void InsertLoginAndJWT(User tempUser) {
+		// 得到默认配置时间
 		int day = authTokenConfigDao.getDayConfig();
+		long userId = tempUser.getId();
+		long tableIndexL = (userId % 10l);
+		String tabIndex = StringExtend.autoGenericCode(Long.toString(tableIndexL), 2);
+		// 创建Login对象，分配JWT token
 		AuthLogin authLogin = new AuthLogin();
 		Date now = new Date();
 		authLogin.setBeginDate(now);
 		authLogin.setEndDate(DateUtils.addDays(now, day));
 		authLogin.setIsExpire(1);
 		authLogin.seteMail(tempUser.geteMail());
-		String jwttoken = JWT.sign(authLogin, 60L * 1000L * 60L * 24L * day);
+		authLogin.setTabIndex(tabIndex);
+		String jwttoken = JWT.sign(authLogin, 60L * 1000L * day);
 		authLogin.setToken(jwttoken);
 		tempUser.setToken(jwttoken);
+		authLoginDao.updateAuthLogin(authLogin);
 		authLoginDao.insertAuthLogin(authLogin);
 
 	}

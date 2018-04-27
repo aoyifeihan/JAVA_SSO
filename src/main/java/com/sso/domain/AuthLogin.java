@@ -14,6 +14,7 @@ public class AuthLogin {
 	private Date beginDate;
     private Date endDate;
     private int isExpire;
+    private String tabIndex;
     // 成员变量
   
     public String getIp() {
@@ -34,6 +35,12 @@ public class AuthLogin {
 	}
 	public void setBeginDate(Date beginDate) {
 		this.beginDate = beginDate;
+	}
+	public String getTabIndex() {
+		return tabIndex;
+	}
+	public void setTabIndex(String tableIndex) {
+		this.tabIndex = tableIndex;
 	}
 	public Date getEndDate() {
 		return endDate;

@@ -31,6 +31,7 @@ import com.sso.util.DateUtils;
 import com.sso.util.JWT;
 import com.sso.util.JsonView;
 import com.sso.util.MD5Tools;
+import com.sso.util.StringExtend;
 
 /**
  * 用户控制器
@@ -73,10 +74,14 @@ public class LoginController {
 	@ResponseBody
 	public String checkIn(String username, String password) throws Exception {
 
-		if(username==null)
-		  return "error";
+		if (username == null)
+			return "error";
 		User tempUser = loginService.checkIn(username, password);
-		AuthLogin entity =JWT.unsign(tempUser.getToken(), AuthLogin.class);
+		AuthLogin entity = JWT.unsign(tempUser.getToken(), AuthLogin.class);
+		// token过期
+		if (entity == null) {
+
+		}
 		String strResult = "";
 		if (tempUser != null) {
 			strResult = SetInfo("ok", tempUser.getToken());
@@ -120,8 +125,7 @@ public class LoginController {
 		return strResult;
 	}
 
-	private String SetInfo(String info)
-	{
+	private String SetInfo(String info) {
 		return SetInfo(info, "");
 	}
 
@@ -138,9 +142,7 @@ public class LoginController {
 		return JSONObject.toJSONString(jsonMap);
 
 	}
-	
-	
-	
+
 	/**
 	 * 检查用户名是否存在
 	 * 
@@ -150,7 +152,7 @@ public class LoginController {
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
 	@ResponseBody
 	public String test() {
-		 
+
 		return "aaaa";
 	}
 

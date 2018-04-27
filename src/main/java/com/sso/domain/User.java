@@ -20,7 +20,14 @@ public class User {
     private Date registerTime;
     private String textVail;
     private String token;
-    public String getToken() {
+    private String ErrorInfo;
+    public String getErrorInfo() {
+		return ErrorInfo;
+	}
+	public void setErrorInfo(String errorInfo) {
+		ErrorInfo = errorInfo;
+	}
+	public String getToken() {
 		return token;
 	}
 	public void setToken(String token) {
