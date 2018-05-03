@@ -27,6 +27,7 @@ import com.sso.dao.UserDao;
 import com.sso.domain.AuthLogin;
 import com.sso.domain.User;
 import com.sso.service.LoginService;
+import com.sso.util.CustomerContextHolder;
 import com.sso.util.DateUtils;
 import com.sso.util.JWT;
 import com.sso.util.JsonView;
@@ -73,7 +74,7 @@ public class LoginController {
 	@RequestMapping(value = "/checkIn", method = RequestMethod.POST)
 	@ResponseBody
 	public String checkIn(String username, String password) throws Exception {
-
+		CustomerContextHolder.setCustomerType("systemSource");
 		if (username == null)
 			return "error";
 		User tempUser = loginService.checkIn(username, password);

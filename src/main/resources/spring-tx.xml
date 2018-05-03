@@ -40,10 +40,7 @@
     </aop:config>
     
     
-    <!-- 事务管理器，依赖于数据源 -->
-    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource" />
-    </bean>
+
     
     <!-- 编写通知：对事务进行增强（通知），需要编写对切入点和具体执行事务细节 -->
     <tx:advice id="txAdvice" transaction-manager="txManager">

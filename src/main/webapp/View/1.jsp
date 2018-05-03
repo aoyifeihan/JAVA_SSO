@@ -33,7 +33,7 @@
 							axios.get('${pageContext.request.contextPath}/othersys/getToken',params)
 							.then(function(respone){
 								thvue.setCookie("token",respone.data.token)
-								top.location = '${pageContext.request.contextPath}/main/checkpassport';
+								//top.location = '${pageContext.request.contextPath}/main/checkpassport';
 							})
 							.catch(function(error){
 							    console.log(error);
@@ -57,7 +57,7 @@
 								alert("没有启用cookie ");
 							} else {
 								//已经启用cookie   
-								alert("已经启用cookie ");
+								//alert("已经启用cookie ");
 							}
 
 						},
