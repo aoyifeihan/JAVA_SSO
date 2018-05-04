@@ -1,4 +1,4 @@
-package com.sso.util;
+package com.sso.util.data;
 
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 //并发有问题

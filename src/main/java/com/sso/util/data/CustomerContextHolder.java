@@ -1,4 +1,4 @@
-package com.sso.util;
+package com.sso.util.data;
 //并发有问题
 public class CustomerContextHolder {
     private static final ThreadLocal<String> contextHolder = new ThreadLocal<String>();

@@ -15,8 +15,8 @@ import com.sso.dao.AuthLoginDao;
 import com.sso.dao.HouseDataConfigDao;
 import com.sso.domain.HouseDataConfig;
 import com.sso.domain.User;
-import com.sso.util.CustomerContextHolder;
 import com.sso.util.JsonView;
+import com.sso.util.data.CustomerContextHolder;
 
 @Controller
 @RequestMapping(value = "/ManyDBTest")
@@ -28,8 +28,8 @@ public class ManyDBTestController {
 	public String passport(HttpServletResponse response, HttpSession session, String type) {
 		String tempX = CustomerContextHolder.getCustomerType();
 		System.out.printf(tempX == null ? "" : tempX);
-		CustomerContextHolder.setCustomerType("fangjiaSource");
-		String tempX2 = CustomerContextHolder.getCustomerType();
+//		CustomerContextHolder.setCustomerType("fangjiaSource");
+//		String tempX2 = CustomerContextHolder.getCustomerType();
 		List<HouseDataConfig> temp = houseDataConfigDao.queryAllHouseDataConfig();
 		HouseDataConfig tempX1 = temp.get(0);
 		return "";

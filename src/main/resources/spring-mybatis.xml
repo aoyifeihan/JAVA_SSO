@@ -5,20 +5,20 @@
 
     <!-- 定义数据源Bean -->
      
-    <bean id="systemSource" class="com.alibaba.druid.pool.DruidDataSource">
+    <bean id="systemSource" class="com.alibaba.druid.pool.DruidDataSource"  init-method="init" destroy-method="close">  
         <property name="url" value="jdbc:mysql://localhost:3306/systemtable" />
         <property name="username" value="root" />
         <property name="password" value="wangyan1101" />
     </bean>
     <!--房价库-->
     
-    <bean id="fangjiaSource" class="com.alibaba.druid.pool.DruidDataSource">
+    <bean id="fangjiaSource" class="com.alibaba.druid.pool.DruidDataSource"  init-method="init" destroy-method="close">   
         <property name="url" value="jdbc:mysql://localhost:3306/fangjia" />
         <property name="username" value="root" />
         <property name="password" value="wangyan1101" />
     </bean> 
     
-  <bean id="dataSource" class="com.sso.util.DynamicDataSource">
+  <bean id="dataSource" class="com.sso.util.data.DynamicDataSource">
         <property name="targetDataSources">
             <map key-type="java.lang.String">
                 <entry value-ref="systemSource" key="systemSource"></entry>
