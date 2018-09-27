@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.sso.dao.AuthTokenConfigDao;
 import com.sso.dao.AuthLoginDao;
-import com.sso.dao.UserDao;
+import com.sso.dao.AuthUserDao;
 import com.sso.domain.AuthLogin;
 import com.sso.domain.User;
 import com.sso.service.LoginService;
@@ -22,7 +22,7 @@ public class LoginServiceImpl implements LoginService {
 	@Resource
 	private AuthLoginDao authLoginDao;
 	@Resource
-	private UserDao userDao;
+	private AuthUserDao userDao;
 	@Resource
 	private AuthTokenConfigDao authTokenConfigDao;
 
@@ -31,10 +31,7 @@ public class LoginServiceImpl implements LoginService {
 	 */
 	@Override
 	public User checkIn(String username, String password) {
-		// User tempUser = null;
-		// AuthLogin authLogin = authLoginDao.queryAuthLoginByName(username);
-		// if (authLogin == null) {
-		String md5Password = MD5Tools.encode(password);
+	 	String md5Password = MD5Tools.encode(password);
 		User tempUser = userDao.findByUsername(username, md5Password);
 		if (tempUser != null) {
 			InsertLoginAndJWT(tempUser);
@@ -44,13 +41,6 @@ public class LoginServiceImpl implements LoginService {
 			tempUser.setErrorInfo("µÇÂ¼Ê§°Ü");
 
 		}
-
-		// } else {
-		// tempUser = new User();
-		// tempUser.seteMail(authLogin.geteMail());
-		// tempUser.setToken(authLogin.getToken());
-		// }
-
 		return tempUser;
 	}
 

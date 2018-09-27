@@ -296,6 +296,7 @@
 			$.ajax({
 				type : "POST",
 				url : "${pageContext.request.contextPath}/login/checkIn",
+				
 				data : json,
 				dataType : "json",
 				success : function(data) {
@@ -315,6 +316,7 @@
 			$.ajax({
 				type : "POST",
 				url : "${pageContext.request.contextPath}/login/register",
+				
 				data : json,
 				dataType : "json",
 				success : function(data) {

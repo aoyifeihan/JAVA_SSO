@@ -1,5 +1,6 @@
 package com.sso.domain;
 
+import java.io.Serializable;
 import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -7,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 /**
  * 用户信息
  */
-public class User {
+public class User implements Serializable{
     // 成员变量
     private Long id;
     private String eMail;

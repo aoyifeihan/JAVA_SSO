@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.annotation.After;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,16 +24,22 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.sso.dao.AuthLoginDao;
-import com.sso.dao.UserDao;
+import com.sso.dao.AuthUserDao;
 import com.sso.domain.AuthLogin;
 import com.sso.domain.User;
+import com.sso.dto.ResponseDTO;
+import com.sso.dto.TokenDTO;
+import com.sso.dto.UserInfoDTO;
 import com.sso.service.LoginService;
 import com.sso.util.DateUtils;
 import com.sso.util.JWT;
 import com.sso.util.JsonView;
 import com.sso.util.MD5Tools;
+import com.sso.util.SerializeUtil;
 import com.sso.util.StringExtend;
 import com.sso.util.data.CustomerContextHolder;
+import com.sso.util.redis.RedisCacheManager;
+import com.sso.util.redis.RedisUtil;
 
 /**
  * 用户控制器
@@ -63,6 +70,9 @@ public class LoginController {
 
 	}
 
+	@Resource(name = "redisCacheManager")
+	private RedisUtil redisCacheManager;
+
 	/**
 	 * 登录方法
 	 * 
@@ -73,24 +83,35 @@ public class LoginController {
 	 */
 	@RequestMapping(value = "/checkIn", method = RequestMethod.POST)
 	@ResponseBody
-	public String checkIn(String username, String password) throws Exception {
-		String tempX = CustomerContextHolder.getCustomerType();
-		System.out.printf(tempX == null ? "" : tempX);
-//		CustomerContextHolder.setCustomerType("systemSource");
-		if (username == null)
+	public String checkIn(@RequestBody UserInfoDTO user) throws Exception {
+		if (user.getUsername() == null)
 			return "error";
-		User tempUser = loginService.checkIn(username, password);
+
+		// 查詢用戶名，密碼
+		User tempUser = loginService.checkIn(user.getUsername(), user.getPassword());
 		AuthLogin entity = JWT.unsign(tempUser.getToken(), AuthLogin.class);
+		entity.setUserId(tempUser.getId());
+
+		// 存入redis
+		String tempStr = JSON.toJSONString(tempUser);
+		redisCacheManager.set(tempUser.getId().toString(), tempStr);
+
+		// 返回信息
+		TokenDTO token = new TokenDTO();
+		ResponseDTO<TokenDTO> req = new ResponseDTO<TokenDTO>();
+
 		// token过期
 		if (entity == null) {
+			req.setCode(50014);
+		}
+		// 正常情况
+		else {
+			req.setCode(20000);
+			token.setToken(tempUser.getToken());
+			req.setData(token);
+		}
 
-		}
-		String strResult = "";
-		if (tempUser != null) {
-			strResult = SetInfo("ok", tempUser.getToken());
-		} else {
-			strResult = SetInfo("error", "");
-		}
+		String strResult = JSON.toJSONString(req);
 		return strResult;
 	}
 

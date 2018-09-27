@@ -1,6 +1,6 @@
 package com.sso.dao;
 
-import com.sso.domain.*;
+import com.sso.domain.AuthLogin;
 
 public interface AuthLoginDao {
 	public abstract void insertAuthLogin(AuthLogin authLogin);

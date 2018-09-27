@@ -6,6 +6,7 @@ import java.util.Date;
  * 用户信息
  */
 public class AuthLogin {
+	
 	private String ip;
     private String token;
     private String eMail;
@@ -15,9 +16,16 @@ public class AuthLogin {
     private Date endDate;
     private int isExpire;
     private String tabIndex;
+    private Long UserId;
     // 成员变量
   
-    public String getIp() {
+    public Long getUserId() {
+		return UserId;
+	}
+	public void setUserId(Long userId) {
+		UserId = userId;
+	}
+	public String getIp() {
 		return ip;
 	}
 	public void setIp(String ip) {

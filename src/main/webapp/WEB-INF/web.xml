@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
-    version="3.1" metadata-complete="true">
-    
-    <!-- 指定Spring配置文件位置 -->
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:spring-*.xml</param-value>
-    </context-param>
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	version="3.1" metadata-complete="true">
 
-    <!-- 注册ServletContext监听器 -->
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
+	<!-- 指定Spring配置文件位置 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:spring-*.xml</param-value>
+	</context-param>
+
+	<!-- 注册ServletContext监听器 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
 
 
 	<!-- 功能权限 filter -->
@@ -44,18 +44,38 @@
 		<dispatcher>ERROR</dispatcher>
 	</filter-mapping>
 
-    <!-- 注册前端控制器 -->
-    <servlet>
-        <servlet-name>sso</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-        <init-param>
-            <param-name>contextConfigLocation</param-name>
-            <param-value>classpath:spring-mvc.xml</param-value>
-        </init-param>
-    </servlet> 
-     <servlet-mapping>
-        <servlet-name>sso</servlet-name>
-        <url-pattern>/</url-pattern>
-    </servlet-mapping>
+	<!-- 注册前端控制器 -->
+	<servlet>
+		<servlet-name>sso</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring-mvc.xml</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>sso</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
 
+	<!--Druid监控 -->
+
+	<!--<servlet>
+		<servlet-name>DruidStatView</servlet-name>
+		<servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+		<init-param>
+			用户名
+			<param-name>loginUsername</param-name>
+			<param-value>aoyifeihan</param-value>
+		</init-param>
+		<init-param>
+			密码
+			<param-name>loginPassword</param-name>
+			<param-value>wangyan1101</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DruidStatView</servlet-name>
+		<url-pattern>/druid/*</url-pattern>
+	</servlet-mapping> -->
 </web-app>
